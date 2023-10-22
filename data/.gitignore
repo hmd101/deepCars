@@ -1,0 +1,3 @@
+confirmed_fronts/*
+tables/*
+!tables/features.csv
