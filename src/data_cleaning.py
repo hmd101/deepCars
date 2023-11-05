@@ -68,6 +68,9 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
     features_df = basic_df.merge(year_df)
     features_df = features_df.merge(image_values_df)
 
+    # drop rows where Launch_Year < 1980 since launch_year = 1900 in Vauxhaul brand exists (probably due to data entry error)
+    features_df = features_df[features_df['Launch_Year'] > 1980]
+
     # option: export features_df df to csv
     if export_to_csv:
         features_df.to_csv(filepath + "features.csv", encoding="utf-8", index=False)
