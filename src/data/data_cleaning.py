@@ -20,8 +20,8 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
         "Genmodel_ID": "Model_ID",
         "Automaker_ID": "Brand_ID",
         "Predicted_viewpoint":"Viewpoint",
-
     }
+
 
     # loop over dataframes and rename column names
     for df in [basic_df, ad_df, image_names_df]:
@@ -32,6 +32,11 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
             df["Launch_Year"] = df["Launch_Year"].astype("int")
             assert df["Launch_Year"].dtype == "int"
 
+
+    # replace all viewpoints of 360 by 0 (since they are both the frontal view)
+    image_names_df.loc[image_names_df["Viewpoint"] == 360, "Viewpoint"] = 0
+
+#df.loc[df['First Season'] > 1990, 'First Season'] = 1
     # create dataframe that contains first selling year per auto id
     year_df = ad_df.groupby(["Model_ID", "Bodytype"])["Launch_Year"].min().reset_index()
 

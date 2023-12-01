@@ -80,6 +80,7 @@ class CarDataset(torch.utils.data.Dataset):
         bodytype = row_of_interest["Bodytype"]
         launch_year = row_of_interest["Launch_Year"]
         model_id = row_of_interest["Model_ID"]
+        viewpoint = row_of_interest["Viewpoint"]
 
          # to get image, concatenate root-dir and file-path in features df
          # different image organizatin depending on all cars datset or small datset
@@ -99,5 +100,5 @@ class CarDataset(torch.utils.data.Dataset):
             image = self.transform(image)
 
 
-        return image, bodytype, model_id, launch_year, self.bodytype2label_fn(bodytype), self.year2label_fn(year=launch_year),Viewpoint
+        return image, bodytype, model_id, launch_year, self.bodytype2label_fn(bodytype), self.year2label_fn(year=launch_year), viewpoint
    
