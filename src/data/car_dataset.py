@@ -99,5 +99,5 @@ class CarDataset(torch.utils.data.Dataset):
             image = self.transform(image)
 
 
-        return image, bodytype, model_id, launch_year, self.bodytype2label_fn(bodytype), self.year2label_fn(year=launch_year)
+        return image, bodytype, model_id, launch_year, self.bodytype2label_fn(bodytype), self.year2label_fn(year=launch_year),Viewpoint
    

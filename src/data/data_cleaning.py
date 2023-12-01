@@ -19,6 +19,8 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
         "Adv_ID": "Advertiser_ID",
         "Genmodel_ID": "Model_ID",
         "Automaker_ID": "Brand_ID",
+        "Predicted_viewpoint":"Viewpoint",
+
     }
 
     # loop over dataframes and rename column names
@@ -45,18 +47,24 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
         "Model_ID",
         "Advertiser_ID",
         "Image_ID",
+        "Viewpoint",
         "file_path",
     ]
 
     row_list = []
 
-    for i, image_name in enumerate(
-        image_names_df["Image_name"].tolist()
-    ):  # range(image_values_df.shape[0]):
+    len_feature_table = image_names_df.shape[0]
+    img_names_lst = image_names_df["Image_name"].tolist()
+    img_viewpoint_lst = image_names_df["Viewpoint"].tolist()
+
+    for i in range(len_feature_table): 
         # store file path
-        file_path = image_name
-        values_xs = image_name.split("$$")
+        file_path = img_names_lst[i]
+        viewpoint = img_viewpoint_lst[i]
+        values_xs = file_path.split("$$")
+        values_xs.append(viewpoint)
         values_xs.append(file_path)
+
         # add row to df
         row_list.append(dict(zip(file_attributes, values_xs)))
 
@@ -67,6 +75,8 @@ def create_feature_df(filepath="../data/tables/", export_to_csv=True):
     # merge dataframes
     features_df = basic_df.merge(year_df)
     features_df = features_df.merge(image_values_df)
+    
+  
 
     # drop rows where Launch_Year < 1980 since launch_year = 1900 in Vauxhaul brand exists (probably due to data entry error)
     features_df = features_df[features_df['Launch_Year'] > 1980]
