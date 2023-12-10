@@ -61,7 +61,7 @@ class CarDataset(torch.utils.data.Dataset):
         bodytype2label_fn:Callable = bodytype2label_fn,
         transform:Callable = None,
         all_cars:bool = True,
-        img_root_dir:str = "../raw_data/all_cars", 
+        img_root_dir:str = "../raw_data/", 
     ):
         self.features = features
         self.bodytype2label_fn = bodytype2label_fn
@@ -87,12 +87,9 @@ class CarDataset(torch.utils.data.Dataset):
          # to get image, concatenate root-dir and file-path in features df
          # different image organizatin depending on all cars datset or small datset
         if self.all_cars:
-            #print("all cars")
-            self.img_root_dir =  "../raw_data/all_cars"
-            image_file_path = self.img_root_dir  + "/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Model_Name"])+"/"+ str(row_of_interest["Launch_Year"])+"/"+str(row_of_interest["Color"])+"/" + row_of_interest["file_path"]
+            image_file_path = self.img_root_dir  +  "all_cars/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Model_Name"])+"/"+ str(row_of_interest["Launch_Year"])+"/"+str(row_of_interest["Color"])+"/" + row_of_interest["file_path"]
         else:
-            self.img_root_dir =  "../raw_data/confirmed_fronts"
-            image_file_path = self.img_root_dir  + "/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Launch_Year"])+"/" + row_of_interest["file_path"]
+            image_file_path = self.img_root_dir  + "confirmed_fronts/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Launch_Year"])+"/" + row_of_interest["file_path"]
 
         # load image as tensor
         image = io.imread(image_file_path)
