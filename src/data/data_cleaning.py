@@ -4,7 +4,7 @@ This file creates one big feature.csv table out of several .csv tables provided 
 import pandas as pd
 
 
-def create_feature_df(filepath="../data/tables/", export_to_csv=True):
+def create_feature_df(filepath="../raw_data/tables/", export_to_csv=True):
     # load dataframes
     basic_df = pd.read_csv(filepath + "Basic_table.csv")
     ad_df = pd.read_csv(filepath + "Ad_table.csv")

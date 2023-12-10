@@ -3,6 +3,8 @@ from skimage import io
 import pandas as pd
 import torch
 import numpy as np
+from torchvision import transforms
+
 
 
 def year2label_fn(year:int, min_year:int, max_year:int, year_bucket_size:int= 2) -> int:
@@ -59,7 +61,7 @@ class CarDataset(torch.utils.data.Dataset):
         bodytype2label_fn:Callable = bodytype2label_fn,
         transform:Callable = None,
         all_cars:bool = True,
-        img_root_dir:str = "../data/all_cars", 
+        img_root_dir:str = "../raw_data/all_cars", 
     ):
         self.features = features
         self.bodytype2label_fn = bodytype2label_fn
@@ -86,10 +88,10 @@ class CarDataset(torch.utils.data.Dataset):
          # different image organizatin depending on all cars datset or small datset
         if self.all_cars:
             #print("all cars")
-            self.img_root_dir =  "../data/all_cars"
+            self.img_root_dir =  "../raw_data/all_cars"
             image_file_path = self.img_root_dir  + "/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Model_Name"])+"/"+ str(row_of_interest["Launch_Year"])+"/"+str(row_of_interest["Color"])+"/" + row_of_interest["file_path"]
         else:
-            self.img_root_dir =  "../data/confirmed_fronts"
+            self.img_root_dir =  "../raw_data/confirmed_fronts"
             image_file_path = self.img_root_dir  + "/"+ row_of_interest["Brand_Name"] + "/"+ str(row_of_interest["Launch_Year"])+"/" + row_of_interest["file_path"]
 
         # load image as tensor
@@ -102,3 +104,35 @@ class CarDataset(torch.utils.data.Dataset):
 
         return image, bodytype, model_id, launch_year, self.bodytype2label_fn(bodytype), self.year2label_fn(year=launch_year), viewpoint
    
+
+# Data agumentation and normalization for training
+img_rgb_mean=[0.485, 0.456, 0.406]
+img_rgb_std = [0.229, 0.224, 0.225]
+
+data_transforms = {
+    "train":transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Resize((224,224)),
+            transforms.ColorJitter(),
+            transforms.RandomInvert(),
+            transforms.RandomPerspective(distortion_scale=0.1, p=0.1),
+            transforms.Normalize(mean=img_rgb_mean,std = img_rgb_std),
+        ]
+    ),
+    "val":transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Resize((224,224)),
+                        transforms.Normalize(mean=img_rgb_mean,std = img_rgb_std),
+
+        ]
+    )
+}
+
+def inverse_transform(y:torch.Tensor, mean:list=img_rgb_mean, std:list=img_rgb_std):
+    mean = torch.as_tensor(mean)
+    std = torch.as_tensor(std)
+    mean = torch.reshape(mean,[3,1,1])
+    std = torch.reshape(std,[3,1,1])
+    return y*std + mean
