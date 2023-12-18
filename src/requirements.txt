@@ -1,0 +1,20 @@
+# Scientific computing
+torch
+torchvision
+torcheval
+numpy
+scikit-image
+
+# Analysis
+pandas
+
+# Visualization
+matplotlib
+seaborn
+tueplots
+
+# Other
+fire
+time
+tqdm
+datetime
