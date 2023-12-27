@@ -13,8 +13,11 @@ matplotlib
 seaborn
 tueplots
 
+# Notebooks
+jupyter
+ipykernel
+
 # Other
 fire
-time
 tqdm
 datetime
