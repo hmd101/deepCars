@@ -1,4 +1,4 @@
-# Transfer Learning to Predict Modernity of Cars from Images
+# Deep Transfer Learning to Predict Modernity of Cars from Images
 
 In this project, we finetune a pre-trained ResNet to classify cars according to their production year and subsequently compute a score for their modernity. We also investigate which pixels in an image are most informative for the resulting prediction.
 
